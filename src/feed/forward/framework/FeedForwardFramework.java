@@ -22,7 +22,7 @@ public class FeedForwardFramework {
     }
     
     static void testData() {
-        ArrayList<Datapoint> testData = DataReader.readData("C:/Users/beckf/Box/2025 Q1/Java Fast-Forward Prototyp/Daten/train.csv");
+        ArrayList<Datapoint> testData = DataReader.readData("mnist/train.csv");
         
         for (int i = 0; i < 5; i++) {
             Datapoint cur = testData.get(i);
