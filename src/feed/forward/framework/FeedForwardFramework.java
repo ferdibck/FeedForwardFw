@@ -4,6 +4,8 @@
  */
 package feed.forward.framework;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author beckf
@@ -15,6 +17,27 @@ public class FeedForwardFramework {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        testData();
+        testTensor();
+    }
+    
+    static void testData() {
+        ArrayList<Datapoint> testData = DataReader.readData("C:/Users/beckf/Box/2025 Q1/Java Fast-Forward Prototyp/Daten/train.csv");
+        
+        for (int i = 0; i < 5; i++) {
+            Datapoint cur = testData.get(i);
+            System.out.println(cur.getData());
+        }
+    }
+    
+    static void testTensor() {
+        Tensor t1 = new Tensor(5, 3);
+        Tensor t2 = new Tensor(5, 1);
+        Tensor r = t1.add(t2);
+        
+        t1.print();
+        t2.print();
+        r.print();
     }
     
 }
