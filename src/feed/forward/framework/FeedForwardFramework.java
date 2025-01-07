@@ -17,8 +17,9 @@ public class FeedForwardFramework {
      */
     public static void main(String[] args) {
         // TODO code application logic here
-        testData();
-        testTensor();
+        //testData();
+        //testTensor();
+        testNetwork();
     }
     
     static void testData() {
@@ -38,6 +39,20 @@ public class FeedForwardFramework {
         t1.print();
         t2.print();
         r.print();
+    }
+    
+    static void testNetwork() {
+        Tensor testx = new Tensor(10, 10);
+        Layer l1 = new Linear(10, 5);
+        Layer l2 = new Linear(5, 3);
+        
+        Netzwerk nn = new Netzwerk();
+        nn.neuerLayer(l1);
+        nn.neuerLayer(l2);
+        //nn.print();
+        
+        Tensor res = nn.forward(testx);
+        res.print();
     }
     
 }
