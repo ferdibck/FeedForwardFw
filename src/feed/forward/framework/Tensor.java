@@ -84,6 +84,7 @@ public class Tensor {
     
     Tensor matmul(Tensor t) {
         if(shape[1] != t.getShape()[0]) {
+            System.out.println("This: "+shape[1]+" Other: "+t.getShape()[0]);
             throw new Error("Inner shapes must match");
         }
         

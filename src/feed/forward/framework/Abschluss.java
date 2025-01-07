@@ -12,12 +12,16 @@ public class Abschluss extends Element {
     Abschluss() {
     }
     
-    Layer neuerLayer(Layer l) {
+    Element neuerLayer(Layer l) {
         l.setzeNaechster(this);
         return l;
     }
     
     Tensor forward(Tensor x) {
         return x;
+    }
+    
+    void print(int cur) {
+        System.out.println("Netzwerk mit "+cur+" Layern");
     }
 }

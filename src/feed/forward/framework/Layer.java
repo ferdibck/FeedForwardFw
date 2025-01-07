@@ -8,17 +8,19 @@ package feed.forward.framework;
  *
  * @author beckf
  */
-public abstract class Layer {
+public abstract class Layer extends Element {
     Element naechster;
     
     void setzeNaechster(Element n) {
         naechster = n;
     }
     
-    Layer neuerLayer(Layer l) {
+    Element neuerLayer(Layer l) {
         naechster = naechster.neuerLayer(l);
         return this;
     }
     
     abstract Tensor forward(Tensor x);
+    
+    abstract void print(int cur);
 }

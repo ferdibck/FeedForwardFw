@@ -12,4 +12,6 @@ public abstract class Element {
     abstract Element neuerLayer(Layer l);
     
     abstract Tensor forward(Tensor x);
+    
+    abstract void print(int cur);
 }

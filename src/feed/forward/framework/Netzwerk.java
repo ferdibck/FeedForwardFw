@@ -22,4 +22,10 @@ public class Netzwerk {
     Tensor forward(Tensor x) {
         return erster.forward(x);
     }
+    
+    void print() {
+        System.out.println("Struktur des Netzwerkes\n==========\n==========\n==========");
+        erster.print(0);
+        System.out.println("==========\n==========\n==========");
+    }
 }
