@@ -28,4 +28,14 @@ public class Netzwerk {
         erster.print(0);
         System.out.println("==========\n==========\n==========");
     }
+    
+    int numParams() {
+        return erster.numParams(0);
+    }
+    
+    GradTensor[] getParams() {
+        GradTensor[] params = new GradTensor[numParams()];
+        
+        return erster.getParams(params, 0);
+    }
 }

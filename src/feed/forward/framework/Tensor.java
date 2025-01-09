@@ -24,8 +24,10 @@ public class Tensor {
         
         entries = new double[size];
         for(int i = 0; i < size; i++) {
-            entries[i] = (int)(Math.random()*10);
+            //entries[i] = (int)(Math.random()*10);
+            entries[i] = Math.random();
         }
+        
     }
     
     int flattenIndex(int x, int y) {
@@ -142,6 +144,28 @@ public class Tensor {
         }
     }
     
+    Tensor weightedAdd(Tensor t, double a, double b) { // a * S + b * T
+        Tensor res = isBroadcastable(t);
+        if(res == null) {
+            throw new Error("Tensor shapes are not broadcastable for addition.");
+        }
+        
+        else {
+            int[] resShape = res.getShape();
+            
+            for(int i = 1; i <= resShape[0]; i++) {
+                
+                for(int j = 1; j<= resShape[1]; j++) {
+                    double entry = a * entries[flattenIndexBroadcasted(i, j)] + b * t.getEntryBroadcasted(i, j);
+                    
+                    res.setEntry(i, j, entry);
+                }
+            }
+            
+            return res;
+        }
+    }
+    
     Tensor multiply(Tensor t) {
         Tensor res = isBroadcastable(t);
         if(res == null) {
@@ -175,5 +199,13 @@ public class Tensor {
         else yb = y;
         
         return flattenIndex(xb, yb);
+    }
+    
+    void setEntries(double[] e) {
+        entries = e;
+    }
+    
+    double[] getEntries() {
+        return entries;
     }
 }

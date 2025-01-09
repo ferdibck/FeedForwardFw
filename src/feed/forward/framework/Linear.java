@@ -9,11 +9,11 @@ package feed.forward.framework;
  * @author beckf
  */
 public class Linear extends Layer {
-    Tensor W, b;
+    GradTensor W, b;
     
     Linear(int num_in, int num_out) {
-        W = new Tensor(num_out, num_in);
-        b = new Tensor(num_out, 1);
+        W = new GradTensor(num_out, num_in);
+        b = new GradTensor(num_out, 1);
     }
     
     Tensor forward(Tensor x) {
@@ -32,5 +32,16 @@ public class Linear extends Layer {
         System.out.println("==========");
         
         naechster.print(cur+1);
+    }
+    
+    int numParams(int cur) {
+        return naechster.numParams(cur + 2);
+    }
+    
+    GradTensor[] getParams(GradTensor[] params, int cur) {
+        params[cur] = W;
+        params[cur+1] = b;
+        
+        return naechster.getParams(params, cur + 2);
     }
 }

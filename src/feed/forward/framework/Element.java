@@ -14,4 +14,8 @@ public abstract class Element {
     abstract Tensor forward(Tensor x);
     
     abstract void print(int cur);
+    
+    abstract int numParams(int cur);
+    
+    abstract GradTensor[] getParams(GradTensor[] params, int cur);
 }

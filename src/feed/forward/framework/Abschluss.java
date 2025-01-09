@@ -24,4 +24,12 @@ public class Abschluss extends Element {
     void print(int cur) {
         System.out.println("Netzwerk mit "+cur+" Layern");
     }
+    
+    int numParams(int cur) {
+        return cur;
+    }
+    
+    GradTensor[] getParams(GradTensor[] params, int cur) {
+        return params;
+    }
 }

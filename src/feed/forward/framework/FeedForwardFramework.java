@@ -49,10 +49,16 @@ public class FeedForwardFramework {
         Netzwerk nn = new Netzwerk();
         nn.neuerLayer(l1);
         nn.neuerLayer(l2);
-        //nn.print();
+        nn.print();
         
         Tensor res = nn.forward(testx);
         res.print();
+        
+        Optimizer optim = new Optimizer(nn.getParams(), 0.001);
+        optim.update();
+        
+        Tensor res2 = nn.forward(testx);
+        res2.print();
     }
     
 }
