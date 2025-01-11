@@ -24,7 +24,6 @@ public class Tensor {
         
         entries = new double[size];
         for(int i = 0; i < size; i++) {
-            //entries[i] = (int)(Math.random()*10);
             entries[i] = Math.random();
         }
         
@@ -35,6 +34,20 @@ public class Tensor {
         flatIndex += (y - 1) * strides[1];
         
         return flatIndex-1;
+    }
+    
+    Tensor(int m, int n, double fill_value) {
+        shape = new int[]{m, n};
+        size = m*n;
+        
+        strides = new int[2];
+        strides[0] = 1;
+        strides[1] = shape[0];
+        
+        entries = new double[size];
+        for(int i = 0; i < size; i++) {
+            entries[i] = fill_value;
+        }
     }
     
     int[] unravelIndex(int i) {
@@ -208,4 +221,44 @@ public class Tensor {
     double[] getEntries() {
         return entries;
     }
+    
+    Tensor transpose() {
+        Tensor transposed = new Tensor(shape[1], shape[0], 0); // n x m - Matrix with zero entries
+        
+        for(int i = 1; i <= shape[1]; i++) {
+            for(int j = 1; j <= shape[0]; j++) {
+                transposed.setEntry(i, j, entries[flattenIndex(j, i)]);
+            }
+        }
+        
+        return transposed;
+    }
+    
+    Tensor sum_rows() {
+        Tensor summed = new Tensor(1, shape[1]);
+        
+        for(int col = 1; col <= shape[1]; col++) {
+            double col_sum = 0;
+            for(int row = 1; row <= shape[0]; row++) {
+                col_sum += getEntry(col, row);
+            }
+            summed.setEntry(1, col, col_sum);
+        }
+        
+        return summed;
+    }
+    
+    Tensor multiply(double c) {
+        Tensor res = new Tensor(shape[0], shape[1]);
+        double[] res_entries = new double[size];
+        
+        for(int i = 0; i < size; i++) {
+            res_entries[i] = c*entries[i];
+        }
+        
+        res.setEntries(res_entries);
+        
+        return res;
+    }
+    
 }

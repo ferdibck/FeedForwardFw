@@ -19,7 +19,8 @@ public class FeedForwardFramework {
         // TODO code application logic here
         //testData();
         //testTensor();
-        testNetwork();
+        //testNetwork();
+        testCycle();
     }
     
     static void testData() {
@@ -59,6 +60,50 @@ public class FeedForwardFramework {
         
         Tensor res2 = nn.forward(testx);
         res2.print();
+    }
+    
+    static void testCycle() {
+        int N = 10; // num test examples
+        
+        // Create network
+        Netzwerk n = new Netzwerk();
+        Layer l = new Linear(1, 1);
+        n.neuerLayer(l);
+        n.print();
+        
+        Optimizer optim = new Optimizer(n.getParams(), 0.001);
+        optim.update();
+        
+        // Create test data
+        Tensor x = new Tensor(1, N);
+
+        Tensor c = new Tensor(1, N, 2); // b = 2
+        
+        Tensor targets = x.add(x).add(c); // y = a * x + b; here: y = 2 * x + 2
+        
+        // Forward phase
+        Tensor preds = n.forward(x);
+        
+        Tensor temp = preds.weightedAdd(targets, 1, -1);
+        //temp.print();
+        Tensor loss = temp.multiply(temp);
+        
+        // Backward phase
+        n.backward(preds, targets);
+        
+        n.compGrads();
+        optim.update();
+        
+        System.out.println("Forward 2");
+        
+        // Forward 2
+        Tensor preds2 = n.forward(x);
+        
+        preds.print();
+        preds2.print();
+        
+        targets.print();
+        
     }
     
 }

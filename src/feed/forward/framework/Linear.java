@@ -10,13 +10,20 @@ package feed.forward.framework;
  */
 public class Linear extends Layer {
     GradTensor W, b;
+    Tensor last_x;
+    Tensor J; // static, used for computing bias gradient
+    Tensor backpass;
     
     Linear(int num_in, int num_out) {
         W = new GradTensor(num_out, num_in);
         b = new GradTensor(num_out, 1);
+        
+        J = new Tensor(1, num_out, 1.0);
     }
     
     Tensor forward(Tensor x) {
+        last_x = x;
+        
         Tensor xprime = b.add(W.matmul(x));
         
         return naechster.forward(xprime);
@@ -43,5 +50,28 @@ public class Linear extends Layer {
         params[cur+1] = b;
         
         return naechster.getParams(params, cur + 2);
+    }
+    
+    void compGrads() {
+        backpass.print();
+        
+        W.setGrad(backpass.matmul(last_x.transpose()));
+        
+        System.out.println("W grad computed");
+        
+        System.out.println("Debug");
+        System.out.println("J =====================");
+        J.print();
+        
+        System.out.println("backpass =====================");
+        backpass.print();
+        
+        b.setGrad(backpass.matmul(J.transpose()));
+    }
+    
+    Tensor backward(Tensor preds, Tensor targets) {
+        backpass = naechster.backward(preds, targets);
+        
+        return W.transpose().matmul(backpass);
     }
 }

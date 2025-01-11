@@ -32,4 +32,17 @@ public class Abschluss extends Element {
     GradTensor[] getParams(GradTensor[] params, int cur) {
         return params;
     }
+    
+    void compGrads() {
+    }
+    
+    Tensor backward(Tensor preds, Tensor targets) {
+        // loss function implementation, here: MSE
+        double constant = 2.0 * targets.getShape()[1];
+        Tensor J = new Tensor(targets.getShape()[1], 1);
+        
+        Tensor backward = preds.weightedAdd(targets, 1/constant, -1/constant);
+        
+        return backward;
+    }
 }

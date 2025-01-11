@@ -19,4 +19,8 @@ public class GradTensor extends Tensor {
     Tensor getGrad() {
         return grad;
     }
+    
+    void setGrad(Tensor g) {
+        grad = g;
+    }
 }

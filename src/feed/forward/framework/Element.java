@@ -18,4 +18,8 @@ public abstract class Element {
     abstract int numParams(int cur);
     
     abstract GradTensor[] getParams(GradTensor[] params, int cur);
+    
+    abstract void compGrads();
+    
+    abstract Tensor backward(Tensor preds, Tensor targets);
 }

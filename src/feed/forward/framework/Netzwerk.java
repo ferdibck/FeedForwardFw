@@ -38,4 +38,12 @@ public class Netzwerk {
         
         return erster.getParams(params, 0);
     }
+    
+    void compGrads() {
+        erster.compGrads();
+    }
+    
+    void backward(Tensor preds, Tensor targets) {
+        erster.backward(preds, targets);
+    }
 }
