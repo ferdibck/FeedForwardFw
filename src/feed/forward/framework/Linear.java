@@ -11,14 +11,14 @@ package feed.forward.framework;
 public class Linear extends Layer {
     GradTensor W, b;
     Tensor last_x;
-    Tensor J; // static, used for computing bias gradient
+    //Tensor J; // static, used for computing bias gradient
     Tensor backpass;
     
     Linear(int num_in, int num_out) {
         W = new GradTensor(num_out, num_in);
         b = new GradTensor(num_out, 1);
         
-        J = new Tensor(1, num_out, 1.0);
+        //J = new Tensor(1, 10, 1.0); // 10 needs to be dynamic with respect to number of data points
     }
     
     Tensor forward(Tensor x) {
@@ -53,18 +53,10 @@ public class Linear extends Layer {
     }
     
     void compGrads() {
-        backpass.print();
-        
         W.setGrad(backpass.matmul(last_x.transpose()));
         
-        System.out.println("W grad computed");
-        
-        System.out.println("Debug");
-        System.out.println("J =====================");
-        J.print();
-        
-        System.out.println("backpass =====================");
-        backpass.print();
+        int n = last_x.getShape()[1];
+        Tensor J = new Tensor(1, n, 1);
         
         b.setGrad(backpass.matmul(J.transpose()));
     }

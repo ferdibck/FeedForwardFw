@@ -67,11 +67,13 @@ public class FeedForwardFramework {
         
         // Create network
         Netzwerk n = new Netzwerk();
-        Layer l = new Linear(1, 1);
+        Layer l = new Linear(1, 2);
+        Layer l2 = new Linear(2, 1);
         n.neuerLayer(l);
-        n.print();
+        n.neuerLayer(l2);
+        //n.print();
         
-        Optimizer optim = new Optimizer(n.getParams(), 0.001);
+        Optimizer optim = new Optimizer(n.getParams(), 0.01);
         optim.update();
         
         // Create test data
@@ -79,30 +81,29 @@ public class FeedForwardFramework {
 
         Tensor c = new Tensor(1, N, 2); // b = 2
         
-        Tensor targets = x.add(x).add(c); // y = a * x + b; here: y = 2 * x + 2
+        Tensor targets = x.weightedAdd(x, 1, 10).add(c); // y = a * x + b; here: y = 2 * x + 2
         
-        // Forward phase
-        Tensor preds = n.forward(x);
         
-        Tensor temp = preds.weightedAdd(targets, 1, -1);
-        //temp.print();
-        Tensor loss = temp.multiply(temp);
-        
-        // Backward phase
-        n.backward(preds, targets);
-        
-        n.compGrads();
-        optim.update();
-        
-        System.out.println("Forward 2");
-        
-        // Forward 2
-        Tensor preds2 = n.forward(x);
-        
-        preds.print();
-        preds2.print();
-        
-        targets.print();
+        Tensor preds;
+        for(int i = 1; i <= 500; i++) {
+            // Forward phase
+            preds = n.forward(x);
+            
+            // Backward phase
+            n.backward(preds, targets);
+            n.compGrads();
+            optim.update();
+            
+            // Debug
+            if(i % 20 == 0) {
+                System.out.println("===== Results in iteration: "+i);
+                System.out.println("Preds: ");
+                preds.print();
+            
+                System.out.println("Targets: ");
+                targets.print();
+            }
+        }
         
     }
     
