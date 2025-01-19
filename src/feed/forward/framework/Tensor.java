@@ -234,19 +234,34 @@ public class Tensor {
         return transposed;
     }
     
-    Tensor sum_rows() {
+    Tensor sum_cols() {
         Tensor summed = new Tensor(1, shape[1]);
         
         for(int col = 1; col <= shape[1]; col++) {
             double col_sum = 0;
             for(int row = 1; row <= shape[0]; row++) {
-                col_sum += getEntry(col, row);
+                col_sum += getEntry(row, col);
             }
             summed.setEntry(1, col, col_sum);
         }
         
         return summed;
     }
+    
+    Tensor sum_rows() {
+        Tensor summed = new Tensor(shape[0], 1);
+        
+        for(int row = 1; row <= shape[0]; row++) {
+            double row_sum = 0;
+            for(int col = 1; col <= shape[1]; col++) {
+                row_sum += getEntry(row, col);
+            }
+            summed.setEntry(1, row, row_sum);
+        }
+        
+        return summed;
+    }
+
     
     Tensor multiply(double c) {
         Tensor res = new Tensor(shape[0], shape[1]);

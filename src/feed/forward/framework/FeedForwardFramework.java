@@ -63,7 +63,10 @@ public class FeedForwardFramework {
     }
     
     static void testCycle() {
-        int N = 10; // num test examples
+        int N = 500; // num test examples
+        
+        double W = 10;
+        double b = 25;
         
         // Create network
         Netzwerk n = new Netzwerk();
@@ -79,9 +82,9 @@ public class FeedForwardFramework {
         // Create test data
         Tensor x = new Tensor(1, N);
 
-        Tensor c = new Tensor(1, N, 2); // b = 2
+        Tensor c = new Tensor(1, N, b); // b = 2
         
-        Tensor targets = x.weightedAdd(x, 1, 10).add(c); // y = a * x + b; here: y = 2 * x + 2
+        Tensor targets = x.weightedAdd(x, 1, W).add(c); // y = W * x + b
         
         
         Tensor preds;
@@ -97,14 +100,26 @@ public class FeedForwardFramework {
             // Debug
             if(i % 20 == 0) {
                 System.out.println("===== Results in iteration: "+i);
-                System.out.println("Preds: ");
-                preds.print();
+                //System.out.println("Preds: ");
+                //preds.print();
             
-                System.out.println("Targets: ");
-                targets.print();
+                //System.out.println("Targets: ");
+                //targets.print();
+                
+                calcMSE(preds, targets);
             }
         }
         
+    }
+    
+    static void calcMSE(Tensor preds, Tensor targets) {
+        double constant = 2.0 * targets.getShape()[1];
+        Tensor loss_per_sample = preds.weightedAdd(targets, 1, -1);
+        loss_per_sample = loss_per_sample.multiply(loss_per_sample);
+        
+        Tensor summed_loss = loss_per_sample.sum_rows();
+        summed_loss = summed_loss.multiply(1/constant);
+        summed_loss.print();
     }
     
 }
